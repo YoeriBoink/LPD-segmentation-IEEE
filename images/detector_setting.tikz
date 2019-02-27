@@ -1,0 +1,36 @@
+\def\centerarc[#1](#2)(#3:#4:#5)% Syntax: [draw options] (center) (initial angle:final angle:radius)
+    { \draw[#1] ($(#2)+({#5*cos(#3)},{#5*sin(#3)})$) arc (#3:#4:#5); }
+
+\definecolor{blueee}{RGB}{61,98,148}
+\definecolor{redd}{RGB}{233,72,73}
+
+\node[inner sep=0pt] (phantom) at (0,-0.35)
+    {\includegraphics[width=7.5cm]{images/experimental_photo2.png}};
+
+
+\node[inner sep=0pt] (phantom_zoom) at (10,0)
+    {\includegraphics[width=2.5cm]{images/exp_phantom.png}};
+
+\foreach \i in {0,...,31}
+{
+	\centerarc[black,line width=2.4](10,0)(11.25*\i-(1.40625+0.703+0.3):11.25*\i+1.40625-(1.40625+0.703)+0.3:3.75)
+}
+    
+\foreach \i in {0,...,63}
+{
+	\centerarc[redd,line width=2.2](10,0)(5.625*\i-(1.40625+0.703+0.1):5.625*\i+1.40625-(1.40625+0.703)+0.1:3.5)
+}
+
+%\foreach \i in {1,...,32}
+%{
+%	\centerarc[redd,line width=1.6](10,0)(45+2.8125*\i-(1.40625+0.703):45+2.8125*\i+1.40625-(1.40625+0.703):3.25)
+%}
+
+\foreach \i in {1,...,64}
+{
+	\centerarc[blueee,line width=1.8](10,0)(2.8125*\i-(1.40625+0.703):2.8125*\i+1.40625-(1.40625+0.703):3.25)
+}
+
+%\draw[darkgreenn, line width=2.0] (16,2)--(16.5,2);
+\draw[black, line width=0.5] (1.2,-2.71)--(10.2,-1.26);
+\draw[black, line width=0.5] (1.2,3.44)--(10.2,1.24);

@@ -1,0 +1,135 @@
+% !TEX root = paper.tex
+
+%%%%%%%%%%%%
+% Packages %
+%%%%%%%%%%%%
+\usepackage{subfiles}
+\usepackage{algpseudocode}
+\usepackage{arydshln}
+
+%% Page Layout
+\usepackage{fullpage} %http://en.wikibooks.org/wiki/LaTeX/Page_Layout
+% Manual headings and margins:
+%\usepackage[activate=normal]{pdfcprot} % Textränder werden einheitlicher angepasst, glatter Rand --> deprecated !!!
+%\usepackage{fancyhdr}        % definiere einfache Headings
+%\usepackage{float}
+%\usepackage{vmargin}         % Seitenränder einstellen leichtgemacht
+%\usepackage[width=1cm, left=3cm]{geometry} % Alternative für Seitenränder
+%\usepackage[Bjornstrup]{fncychap}       % Fancy Chapter Headings
+
+
+%% PDF properties
+\usepackage[pagebackref,pdftex,bookmarks,colorlinks,breaklinks]{hyperref}
+% Define properties for the hyperref package
+\hypersetup{%
+		%colorlinks=true,       %default: false
+		linkcolor=magenta,      %has effects if colorlinks=true
+		citecolor=blue,				
+		filecolor=dullmagenta,
+		urlcolor=magenta,
+		%menucolor=blue,
+		%plainpages=false,
+		%pdfpagemode=none,      %Alternative: =FullScreen
+		%pdfview=FitV,
+		%pdfstartview=FitH,
+		%pdffitwindow=true,
+		%pdfmenubar=false,      %default true
+		%pdfwindowui=false,     %default true
+		%bookmarksopen=true,
+		%bookmarksnumbered=true,
+		%bookmarksopenlevel=2,
+}
+
+
+%% Font packages
+\usepackage[T1]{fontenc}    % Zeichensatzkodierung T1
+\usepackage[utf8]{inputenc} % Definition des Eingabeencodings, also wie Umlaute umgesetzt werden
+\usepackage{lmodern}
+\usepackage{ae}             % Verwendung von AE-Fonts
+%\usepackage[german,ngerman]{babel}
+%\usepackage{color}
+%\definecolor{myred}{rgb}{0.695,0.148,0}
+%\definecolor{mygray}{gray}{0.6}
+
+
+%% AMS Latex packages
+\usepackage{amsmath,amstext,amsfonts,amssymb,amsthm,latexsym}
+% Additional symbols:
+%\usepackage{wasysym}
+%\usepackage{dsfont}          % Mathematische Zeichen wie R oder C mit Doppelstrichen 
+
+
+%% TODO notes
+\usepackage{todonotes}
+
+
+%% Figures
+\usepackage{graphicx}         % for using includegraphics
+\usepackage{epsfig}           % for using epsfig <-- uses includegraphics
+\usepackage{subcaption}
+%\usepackage{caption,subcaption} % http://en.wikibooks.org/wiki/LaTeX/Floats,_Figures_and_Captions
+
+
+%% Tables
+%\usepackage{longtable}       % seitenübergreifende Tabellen
+%\usepackage{array}           % fuer aufwändigere Tabellen
+%\usepackage{tabularx}        % tables with fixed col width and row height
+%\usepackage{colortbl}        % farbige Tabellen (v. D. Carlisle)
+%\usepackage{enumerate,enumitem,multirow,multicol}
+
+
+%% Code visualization
+%\usepackage{listings}        % fuer die Code-Umgebung
+% algorithmicx packages:
+\usepackage{algorithm}
+\usepackage{algpseudocode}
+%\usepackage{algorithmic}
+%\usepackage[ruled,vlined]{algorithm2e} % do this BEFORE loading algorithmicx
+
+
+%% Misc
+%\usepackage[T1]{url}         % T1: allow line breaks for URLs
+%\usepackage{acronym}         % Acronyms
+%\usepackage{times}
+%\usepackage{pgf,pgfarrows,pgfnodes,pgfautomata,pgfheaps} %Pfeile ?
+%\usepackage{background}
+%\usepackage{ifthen}
+%\usepackage[rflt]{floatflt}
+%\usepackage{cancel}			 % fuer Durchstreichungen
+\usepackage{bbm}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Diagrams
+%\usepackage{tikz}
+%\usetikzlibrary{calc,trees,positioning,arrows,chains,shapes.geometric,%
+%    decorations.pathreplacing,decorations.pathmorphing,shapes,%
+%    matrix,shapes.symbols}
+%\tikzset{
+%	>=stealth',
+%  element1/.style={
+%    rectangle, 
+%    rounded corners, 
+%    % fill=black!10,
+%    draw=black,% thick,
+%    text width=10em,
+%    minimum height=3em,
+%    text centered, 
+%    on chain},   
+%%   line/.style={draw, thick, <->},
+%%  element2/.style={
+%%    tape,
+%%    top color=white,
+%%    bottom color=blue!50!black!60!,
+%%    minimum width=8em,
+%%    draw=blue!40!black!90, very thick,
+%%    text width=10em, 
+%%    minimum height=3.5em, 
+%%    text centered, 
+%%    on chain},
+%  every join/.style={->, shorten >=1pt, shorten <=1pt,},% thick},
+%  %decoration={brace},
+%  %tuborg/.style={decorate},
+%  %tubnode/.style={midway, right=2pt},
+%}

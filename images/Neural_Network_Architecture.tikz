@@ -1,0 +1,198 @@
+\def\centerarc[#1](#2)(#3:#4:#5)% Syntax: [draw options] (center) (initial angle:final angle:radius)
+    { \draw[#1] ($(#2)+({#5*cos(#3)},{#5*sin(#3)})$) arc (#3:#4:#5); }
+\def\layersep{2}
+\def\xx{0}
+\def\yy{0}
+\def\xxx{5*\layersep}
+\def\yyy{-5}
+\definecolor{bluee}{RGB}{88,137,176}
+\definecolor{greenn}{RGB}{113,191,110}
+\definecolor{orangee}{RGB}{255,153,51}
+\definecolor{redd}{RGB}{233,72,73}
+\definecolor{darkbluee}{RGB}{44,68,88}
+\definecolor{darkgreenn}{RGB}{56,95,55}
+\definecolor{darkorangee}{RGB}{126,72,25}
+\definecolor{darkredd}{RGB}{116,36,36}
+
+    \tikzstyle{every pin edge}=[<-,shorten <=1pt]
+    \tikzstyle{neuron}=[circle,fill=black!25,draw=black, thick, minimum size=17pt,inner sep=0pt]
+    \tikzstyle{orange neuron}=[neuron, fill=orangee, draw=darkorangee];
+    \tikzstyle{blue neuron}=[neuron, fill=bluee, draw=darkbluee];
+    \tikzstyle{red neuron}=[neuron, fill=redd, draw=darkredd];
+    \tikzstyle{green neuron}=[neuron, fill=greenn, draw=darkgreenn];
+    \tikzstyle{annot} = [text width=4em, text centered]
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LAYER -1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    \node[] (pp1) at (\xx-3*\layersep,\yy-1) {};
+    \node[] (pp3) at (\xx-3*\layersep,\yy-3) {};
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LAYER 0 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    % Draw the hidden layer nodes
+    \foreach \name / \y in {1,...,6}{
+        \path[yshift=0.5cm]
+            node[] (g\name) at (\xx-3*\layersep,\yyy-\y) {};
+            }
+
+	% Draw the output layer nodes
+    \node[orange neuron] (p1) at (\xx-2*\layersep,\yyy-1) {};
+    \node[orange neuron] (p3) at (\xx-2*\layersep,\yyy-3) {};
+    \path (p1) -- (p3) node [black!75, font=\Huge, midway, sloped] {$\dots$};
+
+
+	\foreach \source in {1,...,6}
+	    \foreach \dest in {1,3}
+        	\path (g\source) edge (p\dest);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LAYER 1 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    % Draw the input layer nodes
+    \node[orange neuron] (i1) at (\xx,\yy-1) {};
+    \node[orange neuron] (i3) at (\xx,\yy-3) {};
+    \path (i1) -- (i3) node [black!75, font=\Huge, midway, sloped] (i2) {$\dots$};
+	\draw[decoration={brace,raise=5pt,amplitude=10pt},decorate,-,line width=1.5pt]
+  		(i3.south west) -- (i1.north west) {};
+    \node[red neuron] (i4) at (\xx,\yy-4) {};
+    \node[green neuron] (i5) at (\xx,\yy-5) {};
+    
+    % Annotate input layer nodes
+    \node[annot,left of=i2, node distance=2.2cm] (a2) {\huge $q_{\{1,\dots,k\}}^n$};
+	\node[annot,left of=i4, node distance=1cm] (a4) {\huge $Au_1^n$};
+	\node[annot,yshift=-0.5cm,left of=i5, node distance=0.6cm] (a5) {\huge $f$};
+
+    % Draw the hidden layer nodes
+    \foreach \name / \y in {1,...,6}{
+        \path[yshift=0.5cm]
+            node[blue neuron] (h\name) at (\xx+\layersep,\yy-\y) {};
+        \path[yshift=0.5cm]
+            node[blue neuron] (hh\name) at (\xx+2*\layersep,\yy-\y) {};
+            }
+
+	% Draw the output layer nodes
+    \node[orange neuron] (o1) at (\xx+3*\layersep,\yy-1) {};
+    \node[orange neuron] (o3) at (\xx+3*\layersep,\yy-3) {};
+    \path (o1) -- (o3) node [black!75, font=\Huge, midway, sloped] {$\dots$};
+
+	% Annotate output layer nodes
+    \node[annot,above right of=o1, node distance=1.1cm] (b1) {\huge $q_1^{n+1}$};
+	\node[annot,below right of=o3, node distance=1.1cm,yshift=0.2cm] (b3) {\huge $q_k^{n+1}$};
+
+    % Connect every node in the input layer with every node in the
+    % hidden layer.
+	\foreach \source in {1,3,4,5}
+	    \foreach \dest in {1,...,6}
+        	\path (i\source) edge (h\dest);
+
+	\foreach \source in {1,...,6}
+	    \foreach \dest in {1,...,6}
+        	\path (h\source) edge (hh\dest);
+
+	\foreach \source in {1,...,6}
+	    \foreach \dest in {1,3}
+        	\path (hh\source) edge (o\dest);
+        	
+    % draw the residual step
+	\draw [bend left=45,->, line width=1pt] (i1) to node [auto] {\LARGE \textbf {+}} (o1);
+
+	% draw connection with layer -1 and layer 0
+	\draw [line width=1pt,-] (pp1) to node [auto] {}(i1);
+	\draw [line width=1pt,-] (pp3) to node [auto] {}(i3);
+	\draw [bend right=25, line width=1pt] (p1) to node [auto] {} (i4);
+	\draw [fill=white,white] (\xx-3.4*\layersep,0) rectangle (\xx-2.4*\layersep,-11);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% LAYER 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    % Draw the input layer nodes
+    \node[orange neuron] (ii1) at (\xxx,\yyy-1) {};
+    \node[orange neuron] (ii3) at (\xxx,\yyy-3) {};
+    \path (ii1) -- (ii3) node [black!75, font=\Huge, midway, sloped] (ii2) {$\dots$};
+	\draw[decoration={brace,raise=5pt,amplitude=10pt},decorate,-,line width=1.5pt]
+  		(ii3.south west) -- (ii1.north west) {};
+    \node[red neuron] (ii4) at (\xxx,\yyy-4) {};
+    
+	% Draw connection with layer 0
+	\draw [line width=1pt] (p1) to node [auto] {}(ii1);
+	\draw [line width=1pt] (p3) to node [auto] {\LARGE \textbf {=}}(ii3);
+	
+    % Annotate input layer nodes
+    \node[annot,left of=ii2, node distance=2.2cm] (aa2) {\huge $u_{\{1,\dots,k\}}^n$};
+	\node[annot,below left of=ii4, node distance=2.4cm,yshift=1cm] (aa4) {\huge $A^*q_1^{n+1}$};
+
+    % Draw the hidden layer nodes
+    \foreach \name / \y in {1,...,6}{
+        \path[yshift=0.5cm]
+            node[blue neuron] (hhh\name) at (\xxx+\layersep,\yyy -\y) {};
+        \path[yshift=0.5cm]
+            node[blue neuron] (hhhh\name) at (\xxx+2*\layersep,\yyy-\y) {};
+            }
+
+	% Draw the output layer nodes
+    \node[orange neuron] (oo1) at (\xxx+3*\layersep,\yyy-1) {};
+    \node[orange neuron] (oo3) at (\xxx+3*\layersep,\yyy-3) {};
+    \path (oo1) -- (oo3) node [black!75, font=\Huge, midway, sloped] {$\dots$};
+
+	% Annotate output layer nodes
+    \node[annot,above right of=oo1, node distance=1.1cm] (bb1) {\huge $u_1^{n+1}$};
+	\node[annot,below right of=oo3, node distance=1.1cm,,yshift=0.2cm] (bb3) {\huge $u_k^{n+1}$};
+
+
+    % Connect every node in the input layer with every node in the
+    % hidden layer.
+	\foreach \source in {1,3,4}
+	    \foreach \dest in {1,...,6}
+        	\path (ii\source) edge (hhh\dest);
+
+	\foreach \source in {1,...,6}
+	    \foreach \dest in {1,...,6}
+        	\path (hhh\source) edge (hhhh\dest);
+
+	\foreach \source in {1,...,6}
+	    \foreach \dest in {1,3}
+        	\path (hhhh\source) edge (oo\dest);
+        	
+    % draw the residual step
+	\draw [bend left=45,->, line width=1pt] (ii1) to node [auto] {\LARGE \textbf {+}} (oo1);
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%% CONNECTIONS LAYER 1 - LAYER 2 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+	\centerarc[line width=1pt,-](\xx+2.75*\layersep,\yy-3.28)(-43:71:2.4)
+    \centerarc[line width=1pt,->](\xxx-0.9,\yyy-1.6)(137:284:2.5)
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%% LAYER 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    % Draw the input layer nodes
+    \node[orange neuron] (iii1) at (\xx+10*\layersep,\yy-1) {};
+    \node[orange neuron] (iii3) at (\xx+10*\layersep,\yy-3) {};
+    \path (iii1) -- (iii3) node [black!75, font=\Huge, midway, sloped] (i2) {$\dots$};
+	\node[red neuron] (iii4) at (\xx+10*\layersep,\yy-4) {};
+    \node[green neuron] (iii5) at (\xx+10*\layersep,\yy-5) {};
+    
+    \foreach \name / \y in {1,...,6}
+        \path[yshift=0.5cm]
+            node[] (hhhhh\name) at (\xx+11*\layersep,\yy-\y) {};
+    \foreach \source in {1,3,4,5}
+	    \foreach \dest in {1,...,6}
+        	\path (iii\source) edge (hhhhh\dest);
+        	
+	\draw [fill=white,white] (\xx+10.4*\layersep,0) rectangle (\xx+11.1*\layersep,-6);
+
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%% CONNECTIONS 3 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\draw [bend right=25, line width=1pt] (oo1) to node [auto] {} (iii4);
+	\draw [line width=1pt] (o1) to node [auto] {\LARGE \textbf {=}}(iii1);
+	\draw [line width=1pt] (o3) to node [auto] {\LARGE \textbf {=}}(iii3);
+	
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%% LAYER 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+    % Draw the input layer nodes
+    \node[] (iiii1) at (\xx+11*\layersep,\yyy-1) {};
+    \node[] (iiii3) at (\xx+11*\layersep,\yyy-3) {};
+        	
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%% CONNECTIONS 4 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+	\draw [line width=1pt,-] (oo1) to node [auto] {}(iiii1);
+	\draw [line width=1pt,-] (oo3) to node [auto] {}(iiii3);
+	
+	\draw [fill=white,white] (\xx+10.4*\layersep,0) rectangle (\xx+11.1*\layersep,-8);
+
+
+	\draw [dashed,draw=black!40,line width = 2] (\xx-2.4*\layersep,1.4) rectangle (\xx+10.4*\layersep,-11.2);

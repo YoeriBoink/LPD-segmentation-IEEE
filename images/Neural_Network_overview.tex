@@ -1,0 +1,137 @@
+\begin{scope}[xshift=23cm,yshift=2.5cm,scale=0.9, every node/.style={transform shape}]
+\input{Neural_Network_Architecture.tikz}
+\end{scope}
+
+\definecolor{bluee}{RGB}{88,137,176}
+\definecolor{greenn}{RGB}{113,191,110}
+\definecolor{orangee}{RGB}{255,153,51}
+\definecolor{redd}{RGB}{233,72,73}
+\definecolor{darkbluee}{RGB}{44,68,88}
+\definecolor{darkgreenn}{RGB}{56,95,55}
+\definecolor{darkorangee}{RGB}{126,72,25}
+\definecolor{darkredd}{RGB}{116,36,36}
+
+\newcommand{\networkLayer}[6]{
+	\def\a{#1} % Used to distinguish input resolution for current layer.
+	\def\b{0.02}
+	\def\c{#2} % Width of the cube to distinguish number of input channels for current layer.
+	\def\t{#3} % X offset for current layer.
+	\def\d{#4} % Y offset for current layer.
+
+	% Draw the layer body.
+	\draw[line width=0.3mm](\c+\t,0,\d) -- (\c+\t,\a,\d) -- (\t,\a,\d);                                                      % back plane
+	\draw[line width=0.3mm](\t,0,\a+\d) -- (\c+\t,0,\a+\d) node[midway,below] {#6} -- (\c+\t,\a,\a+\d) -- (\t,\a,\a+\d) -- (\t,0,\a+\d); % front plane
+	\draw[line width=0.3mm](\c+\t,0,\d) -- (\c+\t,0,\a+\d);
+	\draw[line width=0.3mm](\c+\t,\a,\d) -- (\c+\t,\a,\a+\d);
+	\draw[line width=0.3mm](\t,\a,\d) -- (\t,\a,\a+\d);
+
+			% Recolor visible surfaces
+	\filldraw[#5] (\t+\b,\b,\a+\d) -- (\c+\t-\b,\b,\a+\d) -- (\c+\t-\b,\a-\b,\a+\d) -- (\t+\b,\a-\b,\a+\d) -- (\t+\b,\b,\a+\d); % front plane
+	\filldraw[#5] (\t+\b,\a,\a-\b+\d) -- (\c+\t-\b,\a,\a-\b+\d) -- (\c+\t-\b,\a,\b+\d) -- (\t+\b,\a,\b+\d);
+
+			% Colored slice.
+	\ifthenelse {\equal{#5} {}}
+	{} % Do not draw colored slice if #4 is blank.
+	{\filldraw[#5] (\c+\t,\b,\a-\b+\d) -- (\c+\t,\b,\b+\d) -- (\c+\t,\a-\b,\b+\d) -- (\c+\t,\a-\b,\a-\b+\d);} % Else, draw a colored slice.
+}
+		
+% Define the macro.
+% 1st argument: Height and width of the layer rectangle slice.
+% 2nd argument: Depth of the layer slice
+% 3rd argument: X Offset --> use it to offset layers from previously drawn layers.
+% 4th argument: Options for filldraw.
+% 5th argument: Text to be placed below this layer.
+% 6th argument: Y Offset --> Use it when an output needs to be fed to multiple layers that are on the same X offset.
+
+\newcommand{\networkLayerS}[6]{
+	\networkLayer{#1}{#2}{1.455*#4+#3}{2.75*#4}{#5}{#6}
+}
+
+\networkLayerS{4.0}{0.3}{0.0}{0.0}{color=orangee}{\large{$k+2$ $~$}}  
+\networkLayerS{4.0}{0.1}{0.3}{0.0}{color=redd}{}        
+\networkLayerS{4.0}{0.1}{0.4}{0.0}{color=greenn}{}    
+
+\networkLayerS{4.0}{0.65}{0.8}{0.0}{color=bluee}{\large{$32$}}  
+
+\networkLayerS{4.0}{0.65}{1.75}{0.0}{color=bluee}{\large{$32$}}  
+\networkLayerS{4.0}{0.1}{2.7}{0.0}{color=orangee}{}  
+\networkLayerS{4.0}{0.2}{2.8}{0.0}{color=orangee}{\large{$~$ $k$}}  
+
+
+\networkLayerS{4.0}{0.3}{0.0}{6.0}{color=orangee}{\large{$k+1$ $~$}}  
+\networkLayerS{4.0}{0.1}{0.3}{6.0}{color=redd}{}        
+
+\networkLayerS{4.0}{0.65}{0.7}{6.0}{color=bluee}{\large{$32$}}  
+
+\networkLayerS{4.0}{0.65}{1.7}{6.0}{color=bluee}{\large{$32$}}  
+
+\networkLayerS{4.0}{0.1}{2.7}{6.0}{color=orangee}{}  
+\networkLayerS{4.0}{0.2}{2.8}{6.0}{color=orangee}{\large{$~$ $k$}}  
+
+\draw [line width=1.5pt,->] (1.2,-1.6) -- (1.2,-3.88) {};
+\node[text=black,align=left] at (1.0,-2.15) {\large \textit {$A$}};
+\draw [line width=1.5pt,->] (2.25,1.2) -- (3.2,1.2) {};
+
+\networkLayerS{4.0}{0.3}{4.8}{0.0}{color=orangee}{}  
+\networkLayerS{4.0}{0.1}{5.1}{0.0}{color=redd}{}        
+\networkLayerS{4.0}{0.1}{5.2}{0.0}{color=greenn}{}    
+
+\networkLayerS{4.0}{0.65}{5.6}{0.0}{color=bluee}{}  
+
+\networkLayerS{4.0}{0.65}{6.55}{0.0}{color=bluee}{}  
+\networkLayerS{4.0}{0.1}{7.5}{0.0}{color=orangee}{}  
+\networkLayerS{4.0}{0.2}{7.6}{0.0}{color=orangee}{}
+
+\draw [line width=1.5pt,->] (3.6,-3.88) -- (3.6,-1.6) {};
+\node[text=black,align=left] at (3.3,-2.15) {\large \textit {$A^*$}};
+\draw [line width=1.5pt,->] (4.65,-5.2) -- (5.6,-5.2) {};
+
+\networkLayerS{4.0}{0.3}{4.8}{6.0}{color=orangee}{}  
+\networkLayerS{4.0}{0.1}{5.1}{6.0}{color=redd}{}        
+
+\networkLayerS{4.0}{0.65}{5.5}{6.0}{color=bluee}{}  
+
+\networkLayerS{4.0}{0.65}{6.5}{6.0}{color=bluee}{}  
+
+\networkLayerS{4.0}{0.1}{7.5}{6.0}{color=orangee}{}  
+\networkLayerS{4.0}{0.2}{7.6}{6.0}{color=orangee}{}  
+
+\draw [line width=1.5pt,->] (6.0,-1.6) -- (6.0,-3.88) {};
+\node[text=black,align=left] at (5.8,-2.15) {\large \textit {$A$}};
+\node[text=black,align=left] at (5.8,-2.15) {};
+
+\draw [line width=1.5pt,->] (7.05,1.2) -- (8.0,1.2) {};
+\node[text=black,align=left] at (9.0,1.2) {\Huge $\dots$};
+\draw [line width=1.5pt,->] (10.05,1.2) -- (11.0,1.2) {};
+
+\draw [line width=1.5pt,->] (9.45,-5.2) -- (10.4,-5.2) {};
+\node[text=black,align=left] at (11.4,-5.2) {\Huge $\dots$};
+\draw [line width=1.5pt,->] (12.45,-5.2) -- (13.4,-5.2) {};
+
+\networkLayerS{4.0}{0.3}{12.8}{0.0}{color=orangee}{}  
+\networkLayerS{4.0}{0.1}{13.1}{0.0}{color=redd}{}        
+\networkLayerS{4.0}{0.1}{13.2}{0.0}{color=greenn}{}    
+
+\networkLayerS{4.0}{0.65}{13.6}{0.0}{color=bluee}{}  
+
+\networkLayerS{4.0}{0.65}{14.55}{0.0}{color=bluee}{}  
+\networkLayerS{4.0}{0.1}{15.5}{0.0}{color=orangee}{}  
+\networkLayerS{4.0}{0.2}{15.6}{0.0}{color=orangee}{}
+
+\networkLayerS{4.0}{0.3}{12.8}{6.0}{color=orangee}{}  
+\networkLayerS{4.0}{0.1}{13.1}{6.0}{color=redd}{}        
+
+\networkLayerS{4.0}{0.65}{13.5}{6.0}{color=bluee}{}  
+
+\networkLayerS{4.0}{0.65}{14.5}{6.0}{color=bluee}{}  
+
+\networkLayerS{4.0}{0.1}{15.5}{6.0}{color=orangee}{}  
+\networkLayerS{4.0}{0.2}{15.6}{6.0}{color=orangee}{}
+
+\draw [line width=1.5pt,->] (14.0,-1.6) -- (14.0,-3.88) {};
+\node[text=black,align=left] at (13.8,-2.15) {\large \textit {$A$}};
+
+\draw[decoration={brace,raise=5pt,amplitude=15pt},draw=black!80,decorate,-,line width=1.5pt]
+  	(4.0,4.0) -- (10.0,4.0) {};
+
+\draw [line width=1.5pt,->,draw=black!80] (7.0,5) to (7.0,5.5) to node [auto] {\Large zoom-in} (30,5.5) to (30,4.0);

@@ -1,0 +1,33 @@
+
+# not main pdf
+/main.pdf
+/images_raw/
+
+# OS X stuff.
+*.DS_Store
+.DS_Store
+
+# LaTeX temporary files.
+*.pdf
+*.synctex.gz
+*.log
+*.aux
+*.auxlock
+*.toc
+*.lot
+*.lof
+*.dvi
+*.out
+*.fdb_latexmk
+*.fls
+*.bbl
+*.blg
+#*.brf
+*.tdo
+
+# matlab autosave.
+*.m~
+
+# sublime text editor stuff.
+*.sublime-project
+*.sublime-workspace

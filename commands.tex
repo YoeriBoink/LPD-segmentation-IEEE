@@ -1,0 +1,174 @@
+% !TEX root = paper.tex
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{property}[theorem]{Property}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{model}[theorem]{Model}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% simplifications
+\newcommand{\eq}[1]{\begin{equation*}#1\end{equation*}}
+\newcommand{\eqn}[1]{\begin{equation}#1\end{equation}}
+\newcommand{\al}[1]{\begin{align*}#1\end{align*}}
+\newcommand{\aln}[1]{\begin{align}#1\end{align}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% language abbreviations, comments
+\newcommand{\cf}{\textit{cf.}~}
+\newcommand{\eg}{\textit{e.g.}~}
+\newcommand{\ie}{\textit{i.e.}~}
+\newcommand{\etc}{\textit{etc.}\xspace}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% sets
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Rcal}{\mathcal{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\T}{\mathbb{T}}
+\newcommand{\Rb}{\overline{\R}}
+\newcommand{\M}{\mathcal{M}}
+\newcommand{\B}{\mathcal{B}}
+\newcommand{\F}{\mathcal{F}}
+\newcommand{\C}{\mathcal{C}}
+\newcommand{\U}{\mathcal{U}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\W}{\mathcal{W}}
+\renewcommand{\S}{\mathcal{S}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% function spaces
+\newcommand{\Ws}[2]{\text{W}^{#1,#2}}
+\newcommand{\Wo}[2]{\text{W}^{#1,#2}_0(\Omega)}
+\newcommand{\Ls}[1]{\text{L}^{#1}}
+\renewcommand{\L}[1]{\text{L}^{#1}(\Omega)}
+\newcommand{\Lm}[1]{\text{L}^{#1}_\lozenge(\Omega)}
+\newcommand{\Lms}[1]{\mathcal{L}^{#1}_\lozenge(\Omega)}
+\newcommand{\Tf}{\mathcal{D}(\Omega)}
+\newcommand{\Tfc}{\mathcal{D}(\overline{\Omega})}
+\newcommand{\BV}{\text{BV}(\Omega)}
+\renewcommand{\H}[1]{\text{H}^{#1}(\Omega)}
+\newcommand{\Hs}[1]{\text{H}^{#1}}
+\newcommand{\Lin}[2]{\mathcal{L}\left(#1,#2\right)}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Spaces
+\newcommand{\Rcl}{\bar{\mathbb{R}}}%
+\renewcommand{\H}{H}%
+\newcommand{\V}{\mathcal{V}}%
+\newcommand{\X}{\mathcal{X}}%
+\newcommand{\Y}{\mathcal{Y}}%
+\renewcommand{\L}{L}%
+\newcommand{\lp}[2]{\left\| #2 \right\|_{L^{#1}(\Omega)}}%
+\newcommand{\Lp}[1]{L^{#1}(\Omega)}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% differential operators
+\newcommand{\D}{\text{D}}
+\newcommand{\id}{\textnormal{Id}}
+\newcommand{\diff}{\textnormal{\,d}}
+\newcommand{\dx}{\diff x}
+\newcommand{\dH}{\text{d}\mathcal{H}^{N-1}}
+\renewcommand{\div}{\text{div}}
+\newcommand{\pf}[2]{\frac{\partial {#1}}{\partial {#2}}}
+\newcommand{\df}[2]{\frac{d {#1}}{d {#2}}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+% math ops
+\DeclareMathOperator*{\argmax}{\arg \max}%
+\newcommand{\argmin}{\operatornamewithlimits{argmin}}
+\DeclareMathOperator*{\esssup}{\textnormal{ess~sup}}
+\DeclareMathOperator*{\essinf}{\textnormal{ess~inf}}
+\DeclareMathOperator*{\proj}{\text{proj}}
+\newcommand{\prox}{\text{prox}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% stochastic
+\newcommand{\E}[1]{\mathbf{E}\left(#1\right)}
+\newcommand{\Cov}[2]{\mathbf{Cov}\left( #1, #2 \right)}
+\newcommand{\Norm}{\mathcal{N}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\Var}[1]{\mathbf{Var}\left(#1\right)}
+\newcommand{\med}{\text{med}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% misc 
+\newcommand{\supp}{\textnormal{supp}}
+\newcommand{\tf}{{\vec\tau}}
+\newcommand{\J}[1]{\mathfrak{J}_{#1}}
+\newcommand{\eps}{\varepsilon}
+\newcommand{\sign}{\text{sign}}
+\renewcommand{\ker}{\textnormal{ker}}
+\newcommand{\ran}{\textnormal{ran}}
+\newcommand{\domain}[1]{{{\mathcal{D}}(#1)}}
+\newcommand{\set}[1]{\left\{ #1 \right\}}
+\newcommand{\abs}[1]{\left| #1 \right|}
+\newcommand{\norm}[1]{\| #1 \|}
+\newcommand{\inner}[2]{\left\langle #1, #2 \right\rangle}
+\newcommand{\conv}{\text{conv}}
+\newcommand{\smallo}{\text{o}}
+\newcommand{\bigo}{\mathcal{O}}
+\newcommand{\ra}{\rightarrow}
+\newcommand{\eye}{\mathbf{1}}
+\newcommand{\Gr}{\textnormal{Gr}}
+\newcommand{\card}{\textnormal{card}}
+\newcommand{\Reg}{\mathcal{R}}
+\newcommand{\spa}{\textnormal{span}}
+\newcommand{\bbm}{\begin{pmatrix}[l]}
+\newcommand{\ebm}{\end{pmatrix}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Norms and Distances
+\newcommand{\Hmo}[1]{\left\|#1\right\|_{H^{-1}}}% %H-1 Norm
+\newcommand{\Ho}[1]{\left\|#1\right\|_{H^1}}%     %H1 Norm
+\newcommand{\Ltn}[1]{\left\|#1\right\|_{L^2}}%    %L2 Norm
+\newcommand{\tv}[1]{| #1 |_{BV(\Omega)}}%
+\newcommand{\bv}[1]{\left\| #1 \right\|_{BV(\Omega)}}%
+\newcommand{\KL}{D_{KL}}%
+\newcommand{\Ks}{K^*\mathbf{1}_\Sigma}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Derivatives
+\renewcommand{\d}{\partial}%
+\newcommand{\dd}{\partial}%
+\newcommand{\dt}{\d_t}%
+\newcommand{\diw}{\nabla \cdot}%
+\newcommand{\divO}{\nabla_\Omega \cdot}%
+\newcommand{\divQ}{\nabla_Q \cdot}%
+\newcommand{\grad}{\nabla}%
+\newcommand{\gradO}{\grad_\Omega \:}%
+\newcommand{\gradQ}{\grad_Q \:}%
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%% Other Symbols
+\newcommand{\1}{\textbf{1}}%
+\renewcommand{\j}{\textbf{j}}%
+\renewcommand{\v}{\textbf{v}}%
+\newcommand{\w}{\textbf{w}}%
+\renewcommand{\a}{\alpha}%
+\renewcommand{\b}{\beta}%
+\renewcommand{\l}{\lambda}%
+\renewcommand{\O}{\Omega}%
+\newcommand{\fn}{f^{\delta}}%
+\newcommand{\TV}{\text{TV}}
+\newcommand{\TGV}{\text{TGV}}
