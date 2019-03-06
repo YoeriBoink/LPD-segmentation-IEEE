@@ -1,0 +1,17 @@
+\def\centerarc[#1](#2)(#3:#4:#5)% Syntax: [draw options] (center) (initial angle:final angle:radius)
+    { \draw[#1] ($(#2)+({#5*cos(#3)},{#5*sin(#3)})$) arc (#3:#4:#5); }
+
+\definecolor{lightbluee}{RGB}{225,235,245}
+\definecolor{tissue}{RGB}{255,245,235}
+
+\filldraw[draw=black,fill=lightbluee] (6,4) rectangle (14,-4);
+\filldraw[draw=black,fill=tissue] (8.6,1.4) rectangle (11.4,-1.4);
+
+\foreach \i in {0,...,31}
+{
+	\centerarc[black,line width=2.4](10,0)(11.25*\i-(1.40625+0.703+0.3):11.25*\i+1.40625-(1.40625+0.703)+0.3:3.75)
+}
+
+\node (a) at (10,2.5) {\makecell{\Large water:\vspace{1.5mm}\\ \large $\mathbf{c = 1500~m/s}$}};
+
+\node (a) at (10,0) {\makecell{\Large synthetic\\ \Large phantom:\vspace{1.5mm}\\ \large $\mathbf{c > 1500~m/s}$}};

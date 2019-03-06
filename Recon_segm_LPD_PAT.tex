@@ -20,6 +20,7 @@
 \usepackage{multirow}
 \usepackage{tikz}
 \usepackage{verbatim}
+\usepackage{makecell}
 \usepackage{ifthen}
 \usepackage[xcolor]{changebar}
 
@@ -107,7 +108,7 @@ Here $p(\mathbf{x},t)$ is the measured pressure at location $\mathbf{x}$, which 
 \hl{\begin{equation}\label{eq:FW_prep}
 f = Ku:=\int_{|\mathbf{x}-\tilde{\mathbf{x}}|=c(x)t} u(\tilde{\mathbf{x}})\text{d} \tilde{\mathbf{x}},
 \end{equation}}
-where $K$ is the acoustic forward operator mapping the initial pressure to the preprocessed measurements. For a more detailed explanation of the calibration measurement and pre-processing, we refer to \cite[Chapter 2]{Willemink2010} and \cite{Boink2018}.
+where $K$ is the acoustic forward operator mapping the initial pressure to the preprocessed measurements $f$. For a more detailed explanation of the calibration measurement and pre-processing, we refer to \cite[Chapter 2]{Willemink2010} and \cite{Boink2018}.
 
 \subsection{From non-learned to learned primal-dual optimisation}\label{sec:LPD}
 Many inverse problems, including the PAT reconstruction problem \eqref{eq:FW_prep}, can be written as 
@@ -152,7 +153,7 @@ In Algorithm \ref{alg:PDHG}, PDHG is stated, where the $\theta$-acceleration ste
 \begin{algorithmic}
 \For{$n \gets 1$ to $N$}
 \State $q^{n+1}_{\{1,\dotsc,k\}} = q^n_{\{1,\dotsc,k\}} + \Gamma_{\Theta_n}\left(q^n_{\{1,\dotsc,k\}}, A u^n_1,f\right),$
-\State $u^{n+1}_{\{1,\dotsc,k\}} = u^{n}_{\{1,\dotsc,k\}} + \Lambda_{\Theta_n} \left(u^n_{\{1,\dotsc,k\}}, A^* q^{n+1}_1\right).$
+\State $u^{n+1}_{\{1,\dotsc,k\}} = u^{n}_{\{1,\dotsc,k\}} + \Lambda_{\Psi_n} \left(u^n_{\{1,\dotsc,k\}}, A^* q^{n+1}_1\right).$
 \EndFor
 \end{algorithmic}
 \end{center}
@@ -170,7 +171,7 @@ $~$\vspace{-1mm} \hl{\captionof{algorithm}{L-PD (learned). See Fig. \ref{fig:rec
 \label{fig:recon_segm_setup}
 \end{figure*}
 
-In this work, we make use of the learned primal-dual (L-PD) algorithm \cite{Adler2018}, which can be derived from PDHG. The idea for the L-PD approach (Algorithm \ref{alg:LPD}) is to not choose the functionals $F$ and $G$ explicitly, but learn the best update steps for each iteration. This is achieved by a CNN, here represented by the nonlinear functions $\Gamma_{\Theta_n}$ and $\Lambda_{\Theta_n}$, where $\Theta_n$ describes the learned weights for iteration $n$. The key idea is that the inputs of the learned steps of Algorithm \ref{alg:LPD} are still the same as in Algorithm \ref{alg:PDHG}, such that the primal-dual structure is preserved. Note that weights of the network can be different for every iteration $n\in\{1,\dots,N\}$. Moreover, instead of updating one channel of the primal and dual, we allow the network to use $k$ channels. This could encode some kind of `history', which is similar to the acceleration of PDHG, where not only $u^n$, but also $u^{n-1}$ is an input in the first proximal step. However, the different channels can represent more general structures in the primal and dual domain that are useful for reconstruction. \hl{Channel 1 of the final iteration $N$ gives our desired reconstruction. This leaves room for the other channels to represent other useful information; this will be leveraged in section \ref{sec:segmentation}, where we use channel 2 to provide a non-binary segmentation.} In section \ref{sec:results} it will be shown that the L-PD algorithm provides higher quality reconstructions than PDHG applied to a TV regularised model \eqref{eq:TV}. An additional advantage is that L-PD can be enforced to only use a small amount of iterations, whereas in PDHG, one has to wait till convergence, which generally takes many more iterations. \hl{A visualisation of the algorithm as a neural network is given in Fig. \ref{fig:recon_segm_setup}.}
+In this work, we make use of the learned primal-dual (L-PD) algorithm \cite{Adler2018}, which can be derived from PDHG. The idea for the L-PD approach (Algorithm \ref{alg:LPD}) is to not choose the functionals $F$ and $G$ explicitly, but learn the best update steps for each iteration. This is achieved by a CNN, here represented by the nonlinear functions \hl{$\Gamma_{\Theta_n}$ and $\Lambda_{\Psi_n}$, where $\Theta_n$ and $\Psi_n$} describe the learned weights for iteration $n$. The key idea is that the inputs of the learned steps of Algorithm \ref{alg:LPD} are still the same as in Algorithm \ref{alg:PDHG}, such that the primal-dual structure is preserved. Note that weights of the network can be different for every iteration $n\in\{1,\dots,N\}$. Moreover, instead of updating one channel of the primal and dual, we allow the network to use $k$ channels. This could encode some kind of `history', which is similar to the acceleration of PDHG, where not only $u^n$, but also $u^{n-1}$ is an input in the first proximal step. However, the different channels can represent more general structures in the primal and dual domain that are useful for reconstruction. \hl{Channel 1 of the final iteration $N$ gives our desired reconstruction. This leaves room for the other channels to represent other useful information; this will be leveraged in section \ref{sec:segmentation}, where we use channel 2 to provide a non-binary segmentation.} In section \ref{sec:results} it will be shown that the L-PD algorithm provides higher quality reconstructions than PDHG applied to a TV regularised model \eqref{eq:TV}. An additional advantage is that L-PD can be enforced to only use a small amount of iterations, whereas in PDHG, one has to wait till convergence, which generally takes many more iterations. \hl{A visualisation of the algorithm as a neural network is given in Fig. \ref{fig:recon_segm_setup}.}
 
 \section{Methodology}\label{sec:experiments}
 A major interest in photoacoustic tomography is the visualisation of blood vessels in tissue as a marker of diseases, for instance in breast imaging. For this reason, we made use of retinal blood vessel images from the openly available DRIVE-dataset \cite{Staal2004}. A total of 768 training images and 192 test images were obtained by preprocessing patches with a size of $192\times192$ pixels from this dataset. These training and test images have been further processed to contribute to our two goals: obtaining robustness to variations in images and system settings, and obtaining an additional segmentation in a realistic photoacoustic scenario. This is explained in detail in sections \ref{sec:robustness} and \ref{sec:segmentation} respectively.
@@ -179,7 +180,9 @@ For the L-PD algorithm, both a small network and a larger network were trained. 
 \begin{equation}\label{eq:Loss_1}
 L=\min_{\Theta_{\{1,\dots,N\}}}\norm{u_{GT}-u_1^N}^2_2.
 \end{equation}
-For stability in the optimisation, the batch size increases from 2 to 16 in three steps \cite{Smith2017} during 200 Epochs.
+For stability in the optimisation, the batch size increases from 2 to 16 in three steps \cite{Smith2017} during 200 Epochs. \hl{We make use of TensorFlow, executed on a single GTX 1080 TI GPU. Training took between 1 and 4 hours, depending on the amount of detectors used. It should be noted that this depends heavily on the specific operator $A$ used: for training, one has to perform $2N$ iterations per backprojection, which makes the application of $A$ the limiting factor for most tomography problems. 
+
+After training, the computational cost for applying the algorithm depends mostly on the specific operator $A$ that is used. For each iteration, $A$ and $A^*$ have to be applied once. This means that the computational cost is approximately $2N$ times that of FBP. For a TV-reconstruction, the final iteration $\tilde{N}$ depends on the desired accuracy, but is usually in the order of 100 or 1000, while we choose $N=5$ or $N=10$ for L-PD.}
 
 \subsection{Training for robustness}\label{sec:robustness}
 In this experiment we investigate robustness of the L-PD network to changes in the image and system settings, and give solutions to improve this robustness. Digital phantoms are created by setting the background of the vascular images to 0 and setting the maximum to 1. Synthetic data is generated by applying the forward model as explained in section \ref{sec:fw_model} to these phantoms. For the standard data set, a setting of 32 detectors is used, uniformly placed around the phantom \hl{(c.f. right of Fig. \ref{fig:exp_photo})}. The L-PD algorithm is trained with the architecture as specified above. 
@@ -222,7 +225,9 @@ In Table \ref{tab:image_changes}, 8 classes of images are defined, in which one 
 \end{figure}
 
 \subsubsection{System uncertainty}\label{sec:system_uncertainty}
-To investigate the sensitivity of L-PD to changes in system settings, the algorithm is first trained on data from 32 uniformly placed detectors. The trained algorithm is applied to test data with 16 or 64 uniformly placed detectors and 32 detectors in a limited view scenario \hl{(c.f. right of Fig. \ref{fig:exp_photo})}. Next, the network is retrained on a training set where the detectors were randomly chosen from a possibility of 128 detectors. We investigate how retraining on this more diverse training set affects the reconstruction quality. \hl{It is possible to explicitly treat the limited view problem by weighing the pixels at different locations differently \cite{Paltauf2007,Schwab2018}; instead, we choose to let the L-PD algorithm learn to correct for the limited view problem.}
+To investigate the sensitivity of L-PD to changes in system settings, the algorithm is first trained on data from 32 uniformly placed detectors. The trained algorithm is applied to test data with 16 or 64 uniformly placed detectors and 32 detectors in a limited view scenario \hl{(c.f. right of Fig. \ref{fig:exp_photo})}. Next, the network is retrained on a training set where the detectors were randomly chosen from a possibility of 128 detectors. We investigate how retraining on this more diverse training set affects the reconstruction quality. \hl{It is possible to explicitly treat the limited view problem by weighing the pixels at different locations differently \cite{Paltauf2007,Schwab2018}. Instead, we choose to let the L-PD algorithm learn to correct for the limited view problem.
+
+In Appendix \ref{app:SoS} and Appendix \ref{app:cal} robustness to heterogeneous sound speed changes and uncertainty in the calibration measurements are analysed, respectively.}
 
 \subsection{Joint reconstruction and segmentation}\label{sec:segmentation}
 The experiments in section \ref{sec:robustness} are meant to analyse the robustness of the L-PD algorithm to changes in image or in system settings. In these experiments, a homogeneous internal fluence rate is assumed, so that the initial pressure within the blood vessels is uniform. 
@@ -314,14 +319,14 @@ In Fig. \ref{fig:plain_result} reconstructions of a digital phantom from class 0
 
 \begin{figure}[ht!]
 \centering
-\includegraphics[width=0.95\linewidth]{images/paper_plain_results.png}
+\includegraphics[width=0.9\linewidth]{images/paper_plain_results.png}
 \caption{Reconstructions of a vascular phantom of class 0 using a uniform placement of 32 detectors.}
 \label{fig:plain_result}
 \vspace{-3mm}
 \end{figure}
 
 \subsection{Robustness against uncertainty}\label{sec:results_robustness}
-Both the large and the small L-PD network were trained on all the image classes as defined in Table \ref{tab:image_changes} and shown in Fig. \ref{fig:image_changes}. We compared reconstructions of L-PD trained on class 0 to L-PD trained on the same class as the test class. 
+\subsubsection{Image uncertainty} Both the large and the small L-PD network were trained on all the image classes as defined in Table \ref{tab:image_changes} and shown in Fig. \ref{fig:image_changes}. We compared reconstructions of L-PD trained on class 0 to L-PD trained on the same class as the test class. 
 
 \begin{figure}[ht!]
 \centering
@@ -362,6 +367,8 @@ We compare peak signal-to-noise ratios (PSNR) of the small and large network for
 
 It can be seen as well that taking a larger network gives a minor improvement over the small network, but no extreme changes are seen. Finally, it is also apparent that the class that contains all the variety of all the other classes benefits from retraining on the same class, but due to this variety, the PSNR value is lower than for other classes. It is unclear to which extent this could be solved by simply taking a bigger training set. 
 
+\subsubsection{System uncertainty} Next we compare reconstructions of L-PD trained on a fixed setting of 32 detectors to L-PD trained on a random number of detectors, as described in section \ref{sec:system_uncertainty}. \hl{Here only the results for a test set with 64 detectors are shown: the full results are provided in Appendix \ref{app:det}.} In Fig. \ref{fig:system_changes_result}, it can be seen that without training for invariance in detector placement, \hl{there are a lot of undesired local intensity changes in the reconstruction. When training is done with data from a random detector placement, we obtain the desired high-quality reconstruction. This means that L-PD can be applied to data from different number of detectors, without having to perform a time-consuming retraining of the algorithm. }
+
 \begin{figure}[ht!]
 \centering
 \includegraphics[width=\linewidth]{images/system_changes_im.png}
@@ -369,7 +376,7 @@ It can be seen as well that taking a larger network gives a minor improvement ov
 \label{fig:system_changes_result}
 \end{figure}
 
-Next we compare reconstructions of L-PD trained on a fixed setting of 32 detectors to L-PD trained on a random number of detectors, as described in section \ref{sec:system_uncertainty}. In both cases, the algorithm was applied to data from 64 detectors. In Fig. \ref{fig:system_changes_result}, it can be seen that without training for invariance in detector placement, \hl{there are a lot of undesired local intensity changes in the reconstruction. When training is done with data from a random detector placement, we obtain the desired high-quality reconstruction. This means that L-PD can be applied to data from different number of detectors, without having to perform a time-consuming retraining of the algorithm. }
+\hl{In Appendix \ref{app:SoS} and Appendix \ref{app:cal} it is shown that a trained L-PD algorithm is robust against heterogeneous sound speed changes and uncertainty in the calibration measurements, respectively.}
 
 \subsection{Joint reconstruction and segmentation}
 In this section, the joint reconstruction-segmentation algorithm as explained in section \ref{sec:segmentation} is compared to four different well-known methods.
@@ -474,16 +481,64 @@ The authors thank Maura Dantuma for the acquisition of the experimental data. Th
 \bibliography{refs}
 }
 
+\newpage
+
 \appendices
 
 \hl{
 \section{Robustness to detector settings: full results}\label{app:det}
-Here comes text. 
+In this section the full results of the experiments described in section \ref{sec:system_uncertainty} are shown: we compare reconstructions of L-PD trained on a fixed setting of 32 detectors to L-PD trained on a random number of detectors. In Fig. \ref{fig:detector_settings_0}, it can be seen that the L-PD algorithm trained on a fixed detector setting can not directly be applied to a different detector setting. All reconstructions show significant artefacts, however it is not clear to us why different detector settings give very different artefacts. 
 
-\section{Robustness to varying sound speed}\label{app:SoS}
-We still assume the sound speed to be known, but it does not necessarily have to be constant. Derivation of the model with non-constant speed of sound is done by calculating the time-of-flight values, taking refraction of rays into account. The approach is based on solving the Eikonal equation. Details can be found in \cite[section 5.3]{Willemink2010}.
+\begin{figure*}[ht!]
+\centering
+\includegraphics[width=\linewidth]{images//detector_changes_0.png}
+\caption{L-PD trained on a fixed setting of 32 detectors, tested on different detector settings.}
+\label{fig:detector_settings_0}
+\end{figure*}
+
+In Fig. \ref{fig:detector_settings_1}, it can be seen that it helps to train on many detector settings, randomly chosen from a possibility of 128 detectors. The reconstruction quality is good for all images.
+
+\begin{figure*}[ht!]
+\centering
+\includegraphics[width=\linewidth]{images//detector_changes_1.png}
+\caption{L-PD trained on a variable detector setting, tested on different detector settings.}
+\label{fig:detector_settings_1}
+\end{figure*}
+
+\section{Robustness to varying heterogeneous sound speed}\label{app:SoS}
+In this section we analyse the robustness of a trained L-PD algorithm to changes in the sound speed. The algorithm has been trained for a uniform detector setting with 32 detectors, as explained in section \ref{sec:robustness}. Next, the test set has been changed to a scenario where the synthetic phantom has a higher sound speed than the surrounding medium (Fig. \ref{fig:SoS_distribution}). This means that the sound speed is still assumed to be known, but not constant throughout the medium. Derivation of the model with non-constant speed of sound is done by calculating the time-of-flight values, taking refraction of rays into account. The approach is based on solving the Eikonal equation. Details can be found in \cite[section 5.3]{Willemink2010}.
+
+\begin{figure}[ht!]
+\centering
+\resizebox{0.55\linewidth}{!}{%
+\begin{tikzpicture}
+\input{images/sound_speed_schematic.tikz}
+\end{tikzpicture}}
+\caption{Sound speed distribution for a uniform detector setting with 32 detectors: the orange region (synthetic phantom) has a higher sound speed than the blue region (water).}
+\label{fig:SoS_distribution}
+\end{figure}
+
+In Fig. \ref{fig:SoS_results} it can be seen that the reconstruction quality does not become worse when a heterogeneous sound speed is assumed: even if the sound speed is considerably higher within the synthetic phantom (+80 m/s), the reconstruction has the same quality as in the homogeneous sound speed case. 
+
+\begin{figure*}[ht!]
+\centering
+\includegraphics[width=\linewidth]{images//heterogeneous_sound_speed.png}
+\caption{L-PD trained for a homogeneous sound speed, tested on data obtained with a heterogeneous sound speed distribution.}
+\label{fig:SoS_results}
+\end{figure*}
 
 \section{Robustness to different calibrations}\label{app:cal}
-Here comes text. 
+Here the robustness of a trained L-PD algorithm to different calibrations is analysed. As explained in section \ref{sec:fw_model}, a deconvolution is applied to the measured data, which gives us the pre-processed data $f$. This pre-processed data is then used as input for the L-PD algorithm. A different calibration measurement $p_\text{cal}$ gives us a different deconvolution, which results in different input data for our L-PD algorithm. 
+
+We have measured four different calibration phantoms at 4 different times. The photoacoustic imaging system was shut down between the separate measurements to cover all system uncertainty that can be expected between any two measurements. The L-PD algorithm has been trained for a uniform detector setting with 32 detectors, as explained in section \ref{sec:robustness}; this was done with calibration 1. Four test sets were created: one used the same calibration 1, the others had a different calibration in their pre-processing. 
+
+\begin{figure*}[ht!]
+\centering
+\includegraphics[width=\linewidth]{images//calibration_changes.png}
+\caption{L-PD trained on data from calibration 1 and tested on data from four different calibrations.}
+\label{fig:Cal_results}
+\end{figure*}
+
+In Fig. \ref{fig:Cal_results}, it can be seen that a different calibration has a very minor effect on the reconstruction quality: calibration 2 gives a visually identical result to calibration 1; calibration 3 shows two higher intensity spots in the background; calibration 4 shows a slightly increased overall intensity. The latter can be explained by the fact that the absorbed energy might have been different in the fourth calibration phantom, giving a different scaling when performing a deconvolution.
 }
 \end{document}
