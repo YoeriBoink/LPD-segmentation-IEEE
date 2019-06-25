@@ -40,6 +40,11 @@
 \addtolength{\belowcaptionskip}{-1pt}
 
 \begin{document}
+\IEEEoverridecommandlockouts
+\IEEEpubid{\begin{minipage}[t]{\textwidth}\ \\[10pt]
+        \centering\small{Copyright \copyright 2019 IEEE. Personal use of this material is permitted. However, permission to use this material for any other purposes must be obtained from the IEEE by sending a request to pubs-permissions@ieee.org.}
+\end{minipage}}
+
 \title{A Partially Learned Algorithm for Joint Photoacoustic Reconstruction and Segmentation}
 
 \author{Yoeri~E.~Boink, Srirang~Manohar~and~Christoph~Brune\vspace{-5mm}%
@@ -64,7 +69,7 @@ inverse problems, convolutional neural networks, photoacoustic tomography, segme
 \end{IEEEkeywords}
 
 \IEEEpeerreviewmaketitle
-\vspace{-3mm}
+\vspace{-3.5mm}
 \section{Introduction}
 Photoacoustic tomography (PAT) is a hybrid imaging technique that combines high optical absorption contrast of tissues with high resolution from ultrasound detection. It is in the focus of research towards applications in various fields of biomedicine \cite{Zhou2016}, in particular for breast cancer imaging in humans \cite{Heijblom2015, Toi2017, Lin2018}. One of the main objectives in PAT is to acquire information on the vascular geometry in soft tissue: many diseases, such as breast cancer and rheumatoid arthritis can be characterised with increased blood vessel density and irregular vessel structure. A common practice is to first reconstruct the initial pressure image, after which a segmentation algorithm is applied to obtain the segmented vascular geometry. A big disadvantage of such `two-step' approaches is that reconstruction errors due to inaccurate physics modelling, noise or a lack of data will propagate to the subsequent segmentation step. In this work, we employ a partially learned algorithm to solve the reconstruction and segmentation task jointly. By utilising the {same} physics model for both problems, we can achieve higher quality segmentation results than classical non-learned or even learned two-step approaches (Fig. \ref{fig:UNet_vs_LPD}). {The algorithm is a partially learned one in the sense that the physics model is given, but other parts of the algorithm are learned}.
 
